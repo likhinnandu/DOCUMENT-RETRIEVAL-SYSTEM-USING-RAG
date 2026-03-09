@@ -1,129 +1,72 @@
-# Question-Answering-System-using-RAG
+# DOCUMENT RETRIEVAL SYSTEM USING RAG
 
-By [<b>Hema Kalyan Murapaka</b>](https://hemakalyan.netlify.app)
+## Problem Statement
+Organizations and individuals often deal with large volumes of documents, making it difficult to extract specific, context-relevant information quickly. Traditional keyword-based search systems often fail to understand the semantic meaning of queries, leading to inaccurate or irrelevant results. This project addresses the need for an intelligent question-answering system that can intuitively understand natural language queries and retrieve precise, context-aware answers from a custom collection of PDF documents, significantly reducing the time spent searching for information.
 
-Connect with me on social media and explore my work:
+## Architecture
+The system employs a **Retrieval-Augmented Generation (RAG)** architecture to deliver accurate responses:
+1. **Document Ingestion**: PDF documents placed in the `Artifacts` directory are loaded using `PyPDFDirectoryLoader`.
+2. **Text Splitting**: The loaded documents are divided into smaller, manageable chunks using LangChain's `RecursiveCharacterTextSplitter`.
+3. **Embedding Generation**: These text chunks are converted into vector embeddings using Google Generative AI Embeddings (`models/embedding-001`).
+4. **Vector Store**: The embeddings are subsequently stored and indexed in a **FAISS** vector database, allowing for fast and efficient similarity search.
+5. **Retrieval & Answer Generation**: When a user inputs a question, the application queries the FAISS vector store to retrieve the most relevant document chunks. These chunks are provided as context to a Large Language Model (Groq `Llama3-8b-8192`), which synthesizes a precise answer based exclusively on the provided context.
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/hemakalyan)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=flat-square&logo=github)](https://github.com/KalyanM45)
-[![Medium](https://img.shields.io/badge/Medium-Follow-03a57a?style=flat-square&logo=medium)](https://medium.com/@kalyan45)
-[![Twitter](https://img.shields.io/twitter/follow/KalyanM45?style=social)](https://x.com/mhemakalyan)
-[![Sponsor Hema Kalyan Murapaka](https://img.shields.io/badge/Sponsor-Hema_Kalyan-28a745?style=flat-square&logo=github-sponsors)](https://github.com/sponsors/KalyanM45)
+## Project Structure
+```text
+DOCUMENT RETRIEVAL SYSTEM USING RAG/
+├── Artifacts/              # Directory to place input PDF documents for ingestion
+├── .env                    # Environment variables file (API keys)
+├── app.py                  # Main Streamlit application file containing the logic
+├── requirements.txt        # Required Python libraries and dependencies
+├── README.md               # Project documentation
+└── LICENSE                 # Project license
+```
 
-**Special Thanks to GitHub Sponsors**
+## Setup and Installation
 
-## About The Project
-
-
-The DOCUMENT RETRIEVAL SYSTEM USING RAG is a sophisticated tool designed to streamline information retrieval from vast document collections. Built on a foundation of advanced natural language processing techniques, the system features a user-friendly interface powered by Streamlit. Leveraging the LangChain framework and Google Generative AI, it ingests documents, converts them into vector embeddings, and employs the Retrieval augmentation generation(RAG) architecture for accurate question answering. Users can input queries through the intuitive interface, with the system retrieving precise answers based on the document context. With its efficiency, accuracy, and scalability, the system finds applications in research, knowledge management, education, and customer support, representing a significant advancement in information access technology.
-
-## Library Requirements
-
- - faiss-cpu
- - langchain-groq
- - PyPDF2
- - langchain_google_genai
- - langchain
- - streamlit
- - python-dotenv
-
-## Getting Started
-
-This will help you understand how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-## Installation Steps
-
-### Option 1: Installation from GitHub
-
-Follow these steps to install and set up the project directly from the GitHub repository:
+Follow these steps to configure the project locally:
 
 1. **Clone the Repository**
-   - Open your terminal or command prompt.
-   - Navigate to the directory where you want to install the project.
-   - Run the following command to clone the GitHub repository:
-     ```
-     git clone https://github.com/KalyanMurapaka45/Question-Answering-System-using-RAG.git
-     ```
+   ```bash
+   git clone <repository-url>
+   cd "DOCUMENT RETRIEVAL SYSTEM USING RAG"
+   ```
 
-2. **Create a Virtual Environment** (Optional but recommended)
-   - It's a good practice to create a virtual environment to manage project dependencies. Run the following command:
-     ```
-     conda create -p <Environment_Name> python==<python version> -y
-     ```
+2. **Create a Virtual Environment** (Recommended)
+   ```bash
+   python -m venv venv
+   
+   # On Windows:
+   .\venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
+   ```
 
-3. **Activate the Virtual Environment** (Optional)
-   - Activate the virtual environment based on your operating system:
-       ```
-       conda activate <Environment_Name>/
-       ```
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-4. **Install Dependencies**
-   - Navigate to the project directory:
-     ```
-     cd [project_directory]
-     ```
-   - Run the following command to install project dependencies:
-     ```
-     pip install -r requirements.txt
-     ```
+4. **API Key Setup**
+   The application requires API keys from Groq and Google.
+   - Get your Groq API key: [Groq Console](https://console.groq.com/keys)
+   - Get your Google API key: [Google AI Studio](https://aistudio.google.com/app/apikey)
+   
+   Create a `.env` file in the root directory and add your keys:
+   ```dotenv
+   API_KEY=your_groq_api_key_here
+   GOOGLE_API_KEY=your_google_api_key_here
+   ```
 
-5. **Run the Project**
-   - Start the project by running the appropriate command.
-     ```
-     streamlit run app.py
-     ```
+5. **Prepare Documents**
+   Create a folder named `Artifacts` in the root directory (if it doesn't exist) and place all the PDF documents you want the system to process inside this folder.
 
-6. **Access the Project**
-   - Open a web browser or the appropriate client to access the project.
+## Commands to Run the Program
 
+Once the setup is complete and your PDFs are in the `Artifacts` folder, you can start the application using Streamlit:
 
-## API Key Setup
+```bash
+streamlit run app.py
+```
 
-To use this project, you need an API key from Google Gemini Large Language Model and Groq. Follow these steps to obtain and set up your API key:
-
-1. **Get API Key:**
-   - Visit the Provided Links [Groq API](https://console.groq.com/keys) and [Google API](https://aistudio.google.com/app/apikey).
-   - Follow the instructions to create an account and obtain your API key.
-
-2. **Set Up API Key:**
-   - Create a file named `.env` in the project root.
-   - Add your API key to the `.env` file:
-     ```dotenv
-     API_KEY=your_api_key_here
-     ```
-
-   **Note:** Keep your API key confidential. Do not share it publicly or expose it in your code.<br>
-
-
-## Contributing
-
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-• **Report bugs**: If you encounter any bugs, please let us know. Open up an issue and let us know the problem.
-
-• **Contribute code**: If you are a developer and want to contribute, follow the instructions below to get started!
-
-1. Fork the Project
-2. Create your Feature Branch
-3. Commit your Changes
-4. Push to the Branch
-5. Open a Pull Request
-
-• **Suggestions**: If you don't want to code but have some awesome ideas, open up an issue explaining some updates or improvements you would like to see!
-
-#### Don't forget to give the project a star! Thanks again!
-
-## License
-
-This project is licensed under the [Open Source Initiative (OSI)](https://opensource.org/) approved GNU General Public License v3.0 License - see the [LICENSE.txt](LICENSE.txt) file for details.<br>
-
-
-## Contact Details
-
-Hema Kalyan Murapaka - [kalyanmurapaka274@gmail.com](kalyanmurapaka274@gmail.com)<br>
-
-
-## Acknowledgements
-
-We'd like to extend our gratitude to all individuals and organizations who have played a role in the development and success of this project. Your support, whether through contributions, inspiration, or encouragement, has been invaluable. Thank you for being a part of our journey.
+After running the command, open your web browser to the provided local URL (usually `http://localhost:8501`). On the web interface, click **"Ingest the Data into Vector Store"** first to build the embeddings, and then you can start asking questions from your documents!
